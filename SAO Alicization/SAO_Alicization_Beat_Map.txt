@@ -739,3 +739,4 @@ end
 Line 1 - song file
 Line 2 - Image name
 Line 3 - note speed
+The notes might be delayed based on how fast your computer is
