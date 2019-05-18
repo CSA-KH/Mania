@@ -1,20 +1,20 @@
 # #Keenan H
-# #5/6/19
+# #5/17/19
 # #V 0.8.0
-# #Have it where there is a home screen and one playable song
+# #Have it where there is a home screen and one playable song. There is now a 
 
 """Mania is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-
     Mania is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>."""
+
+# #Notes - time delta
 
 import pygame, sys, math
 # from pygame.locals import *
@@ -60,7 +60,9 @@ end = 0
 outline = pygame.image.load("Boarder.png").convert_alpha()
 background = "WP_1.png"
 
-file = "Sword Art Online Alicization.mp3"  # #Song file
+beat_map_file = ""
+
+song_file = "Sword Art Online Alicization.mp3"  # #Song file
 
 
 class Entity(pygame.sprite.Sprite):
@@ -85,6 +87,8 @@ class Game:
         global SONG_BEAT_MAP
         global SCORE
         global background
+        global beat_map_file
+
         # #Screens  0 is false and 1 is true
         self.intro = 1
         self.select = 0
@@ -109,7 +113,7 @@ class Game:
                 # #-----------------------------------------------------------
 
                 elif eventG.type == pygame.MOUSEBUTTONDOWN:
-                    if self.intro == 1 and self.game == 0:
+                    if self.intro == 1 and self.select == 0 and self.game == 0:
                         x = pygame.mouse.get_pos()[0]
                         y = pygame.mouse.get_pos()[1]
 
@@ -120,11 +124,15 @@ class Game:
                             # print('inside')
                             self.logo_clicked = 1
 
-                            # #Calls background, song, and clears the Group
-                            ALL_SPRITES_LIST = pygame.sprite.Group()
                             self.intro = 0
-                            # self.select = 1
-                            self.game = 1
+                            self.select = 1
+                            self.game = 0
+
+                            # #Calls background, song, and clears the Group
+                            '''ALL_SPRITES_LIST = pygame.sprite.Group()
+                            self.intro = 0
+                            self.select = 1
+                            self.game = 0
                             StartGame().make_song_map()  # #Did this so it only reads it once
                             print("HEHEHE")
                             background_load = pygame.image.load(background)
@@ -132,24 +140,52 @@ class Game:
                             pygame.mixer_music.load(file)
                             pygame.mixer_music.play()
 
+                            screen.blit(background_load, (0, 0))'''
+
+                            ALL_SPRITES_LIST = pygame.sprite.Group()
+                            print(ALL_SPRITES_LIST)
+                            print("hdsajidhgasjghdfjksahgjkfhasjkhfjkashfjkhdgsjkgreuiwhfksdbfuidsbknvbweuivbhjgweuyfg")
+
+                            background = chose_wallpaper()
+                            background_load = pygame.image.load("Wallpapers/%s" % background)
+
                             screen.blit(background_load, (0, 0))
 
-                    if self.intro == 0 and self.game == 0:  # #self.intro == 0 and self.select == 1 and self.game == 0
-                        pass
+                    elif self.intro == 0 and self.select == 1 and self.game == 0:  # #self.intro == 0 and self.select == 1 and self.game == 0
+                        global beat_map_file
 
-                    if self.intro == 0 and self.game == 1:
+                        ALL_SPRITES_LIST = pygame.sprite.Group()
+
+                        pos = pygame.mouse.get_pos()
+
+                        x = 30
+                        y = 30  # #30 + 120*i + 30*i
+                        width = 400
+                        height = 120
+
+                        if x + width > pos[0] > x and y + 120 * 0 + 30 * 0 + height > pos[1] > y:
+                            self.intro = 0
+                            self.select = 0
+                            self.game = 1
+
+                            song = "SAO Alicization"
+                            beat_map_file = song
+                            print(beat_map_file)
+                            start_game()
+
+                    if self.intro == 0 and self.select == 0 and self.game == 1:
                         pass
 
                 # #-----------------------------------------------------------
 
                 elif eventG.type == pygame.KEYDOWN:
-                    '''if self.intro == 1 and self.select == 0 and self.game == 0:
+                    if self.intro == 1 and self.select == 0 and self.game == 0:
                         pass
 
                     if self.intro == 0 and self.select == 1 and self.game == 0:
-                        pass'''
+                        pass
 
-                    if self.intro == 0 and self.game == 1:  # #self.intro == 0 and self.select == 0 and self.game == 1
+                    if self.intro == 0 and self.select == 0 and self.game == 1:
 
                         def kill(note_num):
                             global SCORE
@@ -186,37 +222,69 @@ class Game:
                         if eventG.key == pygame.K_RETURN:  # #Enters the game (Will change to the click)
                             ALL_SPRITES_LIST = pygame.sprite.Group()
                             self.intro = 0
-                            # self.select = 1
-                            self.game = 1
-                            StartGame().make_song_map()  # #Did this so it only reads it once
-                            print("HEHEHE")
-                            background_load = pygame.image.load(background)
+                            self.select = 1
+                            self.game = 0
+                            
+                            #print(self.intro)
+                            #print(self.select)
+                            #print(self.game)
 
-                            pygame.mixer_music.load(file)
-                            pygame.mixer_music.play()
+                            background = chose_wallpaper()
 
+                            background_load = pygame.image.load("Wallpapers/%s" % background)
                             screen.blit(background_load, (0, 0))
 
-                    '''if self.intro == 0 and self.select == 1 and self.game == 0:
+                    if self.intro == 0 and self.select == 1 and self.game == 0:
                         if eventG.key == pygame.K_ESCAPE:
+                            ALL_SPRITES_LIST = pygame.sprite.Group()
+                            #print(self.intro)
+                            #print(self.select)
+                            #print(self.game)
                             self.intro = 1
                             self.select = 0
                             self.game = 0
-                            #background = chose_wallpaper()'''
+                            background = chose_wallpaper()
 
-                    if self.intro == 0 and self.game == 1:  # #self.intro == 0 and self.select == 0 and self.game == 1
+                        if eventG.key == pygame.K_RETURN:
+                            # self.intro = 0
+                            # self.select = 0
+                            # self.game = 1
+
+                            # StartGame().make_song_map()  # #Did this so it only reads it once
+                            print("HEHEHE")
+
+                            # background_load = pygame.image.load("Wallpapers/$s" % background)
+
+                            # StartGame().make_song_map()  # #Did this so it only reads it once
+
+                            # pygame.mixer_music.load(file)
+                            # pygame.mixer_music.play()
+
+                            # screen.blit(background_load, (0, 0))
+
+                    if self.intro == 0 and self.select == 0 and self.game == 1:
                         if eventG.key == pygame.K_ESCAPE:
-                            self.intro = 1  # #self.intro = 0
-                            # self.select = 1
+                            ALL_SPRITES_LIST = pygame.sprite.Group()
+
+                            self.intro = 0
+                            self.select = 1
                             self.game = 0
+
+                            print(self.intro)
+                            print(self.select)
+                            print(self.game)
+
                             pygame.mixer_music.stop()
                             background = chose_wallpaper()
                             ALL_SPRITES_LIST = pygame.sprite.Group()
                             SONG_BEAT_MAP = pygame.sprite.Group()
 
+                            background_load = pygame.image.load("Wallpapers/%s" % background)
+                            screen.blit(background_load, (0, 0))
+
             # #-----------------------------------------------------------
 
-            if self.intro == 1 and self.game == 0:  # #Intro screen  self.intro == 1 and self.select == 0 and self.game == 0
+            if self.intro == 1 and self.select == 0 and self.game == 0:  # #self.intro == 1 and self.game == 0:
                 global SCORE
                 ALL_SPRITES_LIST = pygame.sprite.Group()
                 SONG_BEAT_MAP = pygame.sprite.Group()
@@ -227,18 +295,17 @@ class Game:
 
                 screen.blit(background_load, (0, 0))
                 IntroScreen(self.logo_clicked).update()
-                #SelectScreen().update()
+                # SelectScreen().update()
 
-            '''if self.intro == 0 and self.select == 1 and self.game == 0:  # #Select screen
+            if self.intro == 0 and self.select == 1 and self.game == 0:  # #Select screen
                 # ####TEST if (the pos of the mouse is clicked):
                 # ####         self.intro = 0 self.secect = 0 se;f/game = 1
-                pass'''
+                SelectScreen().update()
 
-            if self.intro == 0 and self.game == 1:  # #Game screen  self.intro == 0 and self.select == 0 and self.game == 1
+            if self.intro == 0 and self.select == 0 and self.game == 1:  # #self.intro == 0 and self.game == 1:
                 #if end == 0:
                 StartGame().update()
                 #else:
-
                 #    End().update()
 
 
@@ -248,6 +315,16 @@ def chose_wallpaper():
     background_wp = "WP_%s.png" % random_wallpaper
 
     return background_wp
+
+
+def start_game():
+    StartGame().make_song_map()  # #Did this so it only reads it once
+    background_load = pygame.image.load(background)
+
+    pygame.mixer_music.load(song_file)
+    pygame.mixer_music.play()
+
+    screen.blit(background_load, (0, 0))
 
 
 # #The screens
@@ -306,46 +383,51 @@ class SelectScreen:
         self.click = 0
 
     def update(self):
-        print(self.rect)
-        song_1 = Button(int(30), int(30), 400, 120)
-        ALL_SPRITES_LIST.add(song_1)
+        for i in range(2):
+            song_1 = Button(int(30), int(30 + 120 * i + 30 * i), 400, 120, "SAO Alicization")
+            ALL_SPRITES_LIST.add(song_1)
 
-        song_2 = Button(int(30), int(30 + 120 + 30), 400, 120)
-        ALL_SPRITES_LIST.add(song_2)
+            # song_2 = Button(int(30), int(30 + 120 + 30), 400, 120, "")
+            # ALL_SPRITES_LIST.add(song_2)
 
         ALL_SPRITES_LIST.update()
         ALL_SPRITES_LIST.draw(screen)
         pygame.display.flip()
 
+        #screen.blit(song_1.update()[0], song_1.update()[1])
+
 
 class Button(Entity):
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y, width, height, text):
         super(Button, self).__init__(x, y, width, height)
         self.x = x
         self.y = y
+        self.width = width
+        self.height = height
+        self.button_text = text
 
         self.image = pygame.image.load("Button_1.png")
 
-        self.rect = self.image.get_rect()
-
     def update(self):
         pos = pygame.mouse.get_pos()
-        print(pos)  # #X, Y
-        # print(self.image.get_rect())
-        if self.image.get_rect().collidepoint(pygame.mouse.get_pos()):
+
+        if self.x + self.width > pos[0] > self.x and self.y + self.height > pos[1] > self.y:
             self.image = pygame.image.load("Button_2.png")
-            # print("OWOWOWOWOWOWOWOWOWOW")
         else:
             self.image = pygame.image.load("Button_1.png")
 
         screen.blit(self.image, (self.x, self.y))
 
-        '''# #-----------------------
+        # #-----------------------
         # Makes the text that will go in the button
-        fontObj = pygame.font.SysFont('comicsansms', 20)
-        textSurfaceObj = fontObj.render(self.button_text, True, BLACK)
-        textRectObj = textSurfaceObj.get_rect()
-        textRectObj.center = (self.x + (self.w / 2), self.y + (self.h / 2))'''
+        font_obj = pygame.font.SysFont('comicsansms', 20)
+        text_surface_obj = font_obj.render(self.button_text, True, BLACK)
+        text_rect_obj = text_surface_obj.get_rect()
+        text_rect_obj.center = (self.x + (self.width / 2), self.y + (self.height / 2))
+
+        return text_surface_obj, text_rect_obj
+
+        #screen.blit(text_surface_obj, text_rect_obj)
 
 
 # #-Game Screen
@@ -361,7 +443,7 @@ class StartGame:
         self.window_height = screen_height
 
         # ###test song will change later on when I have a menu where you can select songs
-        self.song = open("SAO Alicization/SAO_Alicization_Beat_map.txt", "r")
+        self.song = open("%s/Beat_Map.txt" % beat_map_file, "r")
         # ###############################################
 
         self.counter = 0
@@ -371,7 +453,7 @@ class StartGame:
 
     def make_song_map(self):
         global background
-        global file
+        global song_file
         global Note_Speed
         global end
 
@@ -379,14 +461,16 @@ class StartGame:
             read_line = notes.replace("\n", "")
             note_with_no_space = read_line.split()
 
-            if self.data <= 2:
+            if self.data <= 3:
                 if self.data == 0:
-                    file = read_line
+                    song_file = read_line
                 if self.data == 1:
                     background = read_line
                     print(background)
                 elif self.data == 2:
                     Note_Speed = float(read_line)
+                elif self.data == 3:
+                    pass
                 self.data += 1
 
             else:
@@ -503,3 +587,4 @@ class MakeNotes(Entity):
 
 
 Game()
+clock.tick(60)
