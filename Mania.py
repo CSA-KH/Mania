@@ -53,6 +53,8 @@ clock = pygame.time.Clock()
 clock_display = clock.get_fps()
 
 SONG_BEAT_MAP = pygame.sprite.Group()
+
+HIGH_SCORE = 0
 SCORE = 0
 
 end = 0
@@ -144,8 +146,8 @@ class Game:
                             screen.blit(background_load, (0, 0))'''
 
                             ALL_SPRITES_LIST = pygame.sprite.Group()
-                            print(ALL_SPRITES_LIST)
-                            print("hdsajidhgasjghdfjksahgjkfhasjkhfjkashfjkhdgsjkgreuiwhfksdbfuidsbknvbweuivbhjgweuyfg")
+                            #print(ALL_SPRITES_LIST)
+                            #print("hdsajidhgasjghdfjksahgjkfhasjkhfjkashfjkhdgsjkgreuiwhfksdbfuidsbknvbweuivbhjgweuyfg")
 
                             background = chose_wallpaper()
                             background_load = pygame.image.load("Wallpapers/%s" % background)
@@ -171,7 +173,7 @@ class Game:
 
                             song = "SAO Alicization"
                             beat_map_file = song
-                            print(beat_map_file)
+                            #print(beat_map_file)
                             start_game()
 
                     if self.intro == 0 and self.select == 0 and self.game == 1:
@@ -190,6 +192,8 @@ class Game:
 
                         def kill(note_num):
                             global SCORE
+                            global HIGH_SCORE
+
                             for notes in SONG_BEAT_MAP:  # #Goes through all of the notes that are in the list
                                 # #checks the x position of the note, and if it equals start, then it will kill the note
                                 if notes.x == self.start + self.note_distance * note_num:
@@ -197,7 +201,13 @@ class Game:
                                     # #----------Checks if the note is between the two different values----------
                                     if self.note_hit_box_1 < notes.rect.y < self.note_hit_box_2:
                                         notes.kill()
-                                        SCORE += 1
+                                        if SCORE >= HIGH_SCORE:
+                                            SCORE += 1
+                                            HIGH_SCORE = SCORE
+                                        elif SCORE < HIGH_SCORE:
+                                            SCORE += 1
+                                            print(HIGH_SCORE)
+                                            pass
 
                         if eventG.key == pygame.K_d:
                             kill(0)
@@ -247,12 +257,13 @@ class Game:
                             background = chose_wallpaper()
 
                         if eventG.key == pygame.K_RETURN:
+                            pass
                             # self.intro = 0
                             # self.select = 0
                             # self.game = 1
 
                             # StartGame().make_song_map()  # #Did this so it only reads it once
-                            print("HEHEHE")
+                            #print("HEHEHE")
 
                             # background_load = pygame.image.load("Wallpapers/$s" % background)
 
@@ -271,9 +282,9 @@ class Game:
                             self.select = 1
                             self.game = 0
 
-                            print(self.intro)
-                            print(self.select)
-                            print(self.game)
+                            #print(self.intro)
+                            #print(self.select)
+                            #print(self.game)
 
                             pygame.mixer_music.stop()
                             background = chose_wallpaper()
@@ -282,6 +293,9 @@ class Game:
 
                             background_load = pygame.image.load("Wallpapers/%s" % background)
                             screen.blit(background_load, (0, 0))
+
+                            SCORE = 0
+                            HIGH_SCORE = 0
 
             # #-----------------------------------------------------------
 
@@ -311,7 +325,7 @@ class Game:
 
 
 def chose_wallpaper():
-    random_wallpaper = random.randrange(1, 11)
+    random_wallpaper = random.randrange(1, 7)
 
     background_wp = "WP_%s.png" % random_wallpaper
 
@@ -361,13 +375,13 @@ class IntroScreen:
         font_obj = pygame.font.SysFont('comicsansms', 30)
         text_surface_obj = font_obj.render(str(int(clock_display)), True, BLACK)
         text_rect_obj = text_surface_obj.get_rect()
-        text_rect_obj.center = (10, 10)
+        text_rect_obj.center = (100, 10)
 
         screen.blit(text_surface_obj, text_rect_obj)
 
         pygame.display.flip()
 
-        print("OWOWOWOWOWOPWOWOWOWOWOIOIJDKLSJHKHSKJHKSJH")
+        #print("OWOWOWOWOWOPWOWOWOWOWOIOIJDKLSJHKHSKJHKSJH")
 
 
 class Logo(Entity):
@@ -481,7 +495,7 @@ class StartGame:
 
         self.note_hit_box_2 = self.window_height - self.window_height / 5.5
 
-        self.end = 1
+        self.end = 0
 
         self.background = chose_wallpaper()
 
@@ -565,7 +579,14 @@ class StartGame:
 
             screen.blit(outline, (0, 0))
 
-        elif self.end == 1:
+            if pygame.mixer_music.get_busy() == 1:
+                self.end = 0
+            elif pygame.mixer_music.get_busy() == 0:
+                self.end = 1
+
+            #print(self.end)
+
+        if self.end == 1:
             ALL_SPRITES_LIST = pygame.sprite.Group()
             pygame.mixer_music.stop()
 
