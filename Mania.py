@@ -1,7 +1,7 @@
 # #Keenan H
-# #5/17/19
-# #V 0.8.0
-# #Have it where there is a home screen and one playable song. There is now a 
+# #5/6/19
+# #V 1.0.0
+# #I now have a select screen that works properly, one finished song, and an end screen
 
 """Mania is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -50,6 +50,7 @@ ALL_SPRITES_LIST = pygame.sprite.Group()
 ALL_NOTES = pygame.sprite.Group()
 
 clock = pygame.time.Clock()
+clock_display = clock.get_fps()
 
 SONG_BEAT_MAP = pygame.sprite.Group()
 SCORE = 0
@@ -345,7 +346,9 @@ class IntroScreen:
     def update(self):
         num = 3.33333333333333333333333333333333333
         logo = Logo(int(screen_width / num), int(screen_height / 8), 600, 600, self.clicked)
-        ALL_SPRITES_LIST.add(logo)
+        #ALL_SPRITES_LIST.add(logo)
+        logo.update()
+
 
         # ALL_SPRITES_LIST.update()
         # print("IT WORKS")
@@ -353,25 +356,48 @@ class IntroScreen:
         # screen.blit(self.logo, (int(screen_width / num), int(screen_height / 8)))
 
         ALL_SPRITES_LIST.draw(screen)
+        #pygame.display.flip()
+
+        font_obj = pygame.font.SysFont('comicsansms', 30)
+        text_surface_obj = font_obj.render(str(int(clock_display)), True, BLACK)
+        text_rect_obj = text_surface_obj.get_rect()
+        text_rect_obj.center = (10, 10)
+
+        screen.blit(text_surface_obj, text_rect_obj)
+
         pygame.display.flip()
+
+        print("OWOWOWOWOWOPWOWOWOWOWOIOIJDKLSJHKHSKJHKSJH")
 
 
 class Logo(Entity):
     def __init__(self, x, y, width, height, move):
         super(Logo, self).__init__(x, y, width, height)
 
-        self.image = pygame.image.load("Mania_Title.png").convert_alpha()
-        self.image = pygame.transform.scale(self.image, (width, height))
+        self.image_decide = "Mania_Title.png"
 
-        self.move = move
-
-        self.x_change = -2
-        self.y_change = 0
+        self.image = pygame.image.load(self.image_decide)
 
     def update(self):
         # self.rect.move_ip(self.x_change, self.y_change)
         # print(self.move)
-        pass
+        #pass
+
+        x = pygame.mouse.get_pos()[0]
+        y = pygame.mouse.get_pos()[1]
+
+        sqx = (x - screen_width / 2) ** 2
+        sqy = (y - screen_height / 2) ** 2
+
+        if math.sqrt(sqx + sqy) < 300:
+            self.image_decide = "Mania_Title_2.png"
+        else:
+            self.image_decide = "Mania_Title.png"
+
+        self.image = pygame.image.load(self.image_decide)
+        self.image = pygame.transform.scale(self.image, (600, 600))
+
+        screen.blit(self.image, (self.x, self.y))
 
 
 # #-Select screen
@@ -383,18 +409,22 @@ class SelectScreen:
         self.click = 0
 
     def update(self):
-        for i in range(2):
-            song_1 = Button(int(30), int(30 + 120 * i + 30 * i), 400, 120, "SAO Alicization")
-            ALL_SPRITES_LIST.add(song_1)
+        text = ""
+        for i in range(5):
+            if i == 0:
+                text = "SAO Alicization"
+            elif i == 1:
+                text = ""
+            elif i == 2:
+                text = ""
+            elif i == 3:
+                text = ""
+            elif i == 4:
+                text = ""
+            song_button = Button(int(30), int(30 + 120 * i + 30 * i), 400, 120, text)
+            screen.blit(song_button.update()[0], song_button.update()[1])
 
-            # song_2 = Button(int(30), int(30 + 120 + 30), 400, 120, "")
-            # ALL_SPRITES_LIST.add(song_2)
-
-        ALL_SPRITES_LIST.update()
-        ALL_SPRITES_LIST.draw(screen)
         pygame.display.flip()
-
-        #screen.blit(song_1.update()[0], song_1.update()[1])
 
 
 class Button(Entity):
@@ -420,7 +450,7 @@ class Button(Entity):
 
         # #-----------------------
         # Makes the text that will go in the button
-        font_obj = pygame.font.SysFont('comicsansms', 20)
+        font_obj = pygame.font.SysFont('comicsansms', 30)
         text_surface_obj = font_obj.render(self.button_text, True, BLACK)
         text_rect_obj = text_surface_obj.get_rect()
         text_rect_obj.center = (self.x + (self.width / 2), self.y + (self.height / 2))
@@ -450,6 +480,10 @@ class StartGame:
         self.data = 0
 
         self.note_hit_box_2 = self.window_height - self.window_height / 5.5
+
+        self.end = 1
+
+        self.background = chose_wallpaper()
 
     def make_song_map(self):
         global background
@@ -509,50 +543,38 @@ class StartGame:
 
     def update(self):
         global SCORE
-        # for ent in ALL_SPRITES_LIST:  # #Updates the notes so they move down
-        #    self.counter += 1
-        #    if self.counter == 4:
-        #        self.counter = 0
-        #    if self.counter != 4:
-        #        ent.update()
+        global ALL_SPRITES_LIST
+        global SONG_BEAT_MAP
 
-        # #Scores the visuals
-        score = ShowScore()
-        surface = score.textSurface
-        rect = score.textRect
+        if self.end == 0:
+            score = ShowScore()
+            surface = score.textSurface
+            rect = score.textRect
 
-        ALL_SPRITES_LIST.update()
+            ALL_SPRITES_LIST.update()
 
-        for notes in SONG_BEAT_MAP:
-            if notes.rect.y > self.note_hit_box_2:
-                notes.kill()
-                SCORE = 0
+            for notes in SONG_BEAT_MAP:
+                if notes.rect.y > self.note_hit_box_2:
+                    notes.kill()
+                    SCORE = 0
 
-        screen.blit(surface, rect)
+            screen.blit(surface, rect)
 
-        # Keys(self.start, screen_height - self.note_height * 5, self.note_width, self.note_height * 4)
+            ALL_SPRITES_LIST.draw(screen)
+            pygame.display.flip()
 
-        ALL_SPRITES_LIST.draw(screen)
-        pygame.display.flip()
+            screen.blit(outline, (0, 0))
 
-        # pygame.draw.rect(screen, (0, 0, 0), (screen_width - 350, 10, 300, 50))
+        elif self.end == 1:
+            ALL_SPRITES_LIST = pygame.sprite.Group()
+            pygame.mixer_music.stop()
 
-        screen.blit(outline, (0, 0))
+            SONG_BEAT_MAP = pygame.sprite.Group()
 
-        # screen.blit(surface, rect)
-
-        # screen.blit(background, (0, 0))
-        # screen.fill(self.color)
-        # screen.blit(outline, (0, 0))
-
-
-# #End Screen
-class End:
-    def __init__(self):
-        self.color = BLACK
-
-    def update(self):
-        screen.fill(self.color)
+            background_load = pygame.image.load("Wallpapers/%s" % self.background)
+            screen.blit(background_load, (0, 0))
+            #screen.fill(BLACK)
+            pygame.display.flip()
 
 
 # #Text
