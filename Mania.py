@@ -422,13 +422,13 @@ class SelectScreen:
             if i == 0:
                 text = "SAO Alicization"
             elif i == 1:
-                text = ""
+                text = "Coming Soon"
             elif i == 2:
-                text = ""
+                text = "Coming Soon"
             elif i == 3:
-                text = ""
+                text = "Coming Soon"
             elif i == 4:
-                text = ""
+                text = "Coming Soon"
             song_button = Button(int(30), int(30 + 120 * i + 30 * i), 400, 120, text)
             screen.blit(song_button.update()[0], song_button.update()[1])
 
@@ -643,6 +643,7 @@ def end_screen():
 
     TOP10 = sorted(TOP10, key=int, reverse=True)
     scores = open("Top_Score.txt", "a")
+    
     if CHANGE_W == 0:
         # This enties the file
         scores2 = open("Top_Score.txt", "w")
@@ -720,6 +721,7 @@ def end_screen():
     screen.blit(text_surface_obj_enter, text_rect_obj_enter)
 
     pygame.display.flip()
+
 
 # #Text
 # # - Score
