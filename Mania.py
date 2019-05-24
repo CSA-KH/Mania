@@ -1,7 +1,7 @@
 # #Keenan H
 # #5/6/19
-# #V 1.0.0
-# #I now have a select screen that works properly, one finished song, and an end screen
+# #V 1.0.1
+# #I now have a select screen that works properly, one finished song, and an end screen with a top score.
 
 """Mania is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -57,6 +57,11 @@ SONG_BEAT_MAP = pygame.sprite.Group()
 HIGH_SCORE = 0
 SCORE = 0
 
+TOP = []
+TOP10 = []
+CHANGE = 0
+CHANGE_W = 0
+
 end = 0
 
 # #Screen images
@@ -102,6 +107,7 @@ class Game:
 
         self.note_hit_box_1 = self.window_height - self.window_height / 3.6
         self.note_hit_box_2 = self.window_height - self.window_height / 6
+        self.note_hit_box_3 = self.window_height - self.window_height / 3
 
         self.start = screen_width / 6  # #Start is where the first note will be placed
 
@@ -132,27 +138,16 @@ class Game:
                             self.game = 0
 
                             # #Calls background, song, and clears the Group
-                            '''ALL_SPRITES_LIST = pygame.sprite.Group()
-                            self.intro = 0
-                            self.select = 1
-                            self.game = 0
-                            StartGame().make_song_map()  # #Did this so it only reads it once
-                            print("HEHEHE")
-                            background_load = pygame.image.load(background)
-
-                            pygame.mixer_music.load(file)
-                            pygame.mixer_music.play()
-
-                            screen.blit(background_load, (0, 0))'''
-
                             ALL_SPRITES_LIST = pygame.sprite.Group()
-                            # print(ALL_SPRITES_LIST)
-                            # print("hdsajidhgasjghdfjksahgjkfhasjkhfjkashfjkhdgsjkgreuiwhfksdbfuidsbknvbweuivbhjgweuyfg")
+                            #print(ALL_SPRITES_LIST)
+                            #print("hdsajidhgasjghdfjksahgjkfhasjkhfjkashfjkhdgsjkgreuiwhfksdbfuidsbknvbweuivbhjgweuyfg")
 
                             background = chose_wallpaper()
                             background_load = pygame.image.load("Wallpapers/%s" % background)
 
                             screen.blit(background_load, (0, 0))
+
+                            esc()
 
                     elif self.intro == 0 and self.select == 1 and self.game == 0:  # #self.intro == 0 and self.select == 1 and self.game == 0
                         global beat_map_file
@@ -173,8 +168,10 @@ class Game:
 
                             song = "SAO Alicization"
                             beat_map_file = song
-                            # print(beat_map_file)
+                            #print(beat_map_file)
                             start_game()
+
+                            esc()
 
                     if self.intro == 0 and self.select == 0 and self.game == 1:
                         pass
@@ -207,7 +204,9 @@ class Game:
                                         elif SCORE < HIGH_SCORE:
                                             SCORE += 1
                                             print(HIGH_SCORE)
-                                            pass
+                                    if self.note_hit_box_1 > notes.rect.y > self.note_hit_box_3:
+                                        notes.kill()
+                                        SCORE = 0
 
                         if eventG.key == pygame.K_d:
                             kill(0)
@@ -235,44 +234,28 @@ class Game:
                             self.intro = 0
                             self.select = 1
                             self.game = 0
-
-                            # print(self.intro)
-                            # print(self.select)
-                            # print(self.game)
+                            
+                            #print(self.intro)
+                            #print(self.select)
+                            #print(self.game)
 
                             background = chose_wallpaper()
 
                             background_load = pygame.image.load("Wallpapers/%s" % background)
                             screen.blit(background_load, (0, 0))
 
+                            esc()
+
                     if self.intro == 0 and self.select == 1 and self.game == 0:
                         if eventG.key == pygame.K_ESCAPE:
                             ALL_SPRITES_LIST = pygame.sprite.Group()
-                            # print(self.intro)
-                            # print(self.select)
-                            # print(self.game)
+                            #print(self.intro)
+                            #print(self.select)
+                            #print(self.game)
                             self.intro = 1
                             self.select = 0
                             self.game = 0
                             background = chose_wallpaper()
-
-                        if eventG.key == pygame.K_RETURN:
-                            pass
-                            # self.intro = 0
-                            # self.select = 0
-                            # self.game = 1
-
-                            # StartGame().make_song_map()  # #Did this so it only reads it once
-                            # print("HEHEHE")
-
-                            # background_load = pygame.image.load("Wallpapers/$s" % background)
-
-                            # StartGame().make_song_map()  # #Did this so it only reads it once
-
-                            # pygame.mixer_music.load(file)
-                            # pygame.mixer_music.play()
-
-                            # screen.blit(background_load, (0, 0))
 
                     if self.intro == 0 and self.select == 0 and self.game == 1:
                         if eventG.key == pygame.K_ESCAPE:
@@ -282,9 +265,9 @@ class Game:
                             self.select = 1
                             self.game = 0
 
-                            # print(self.intro)
-                            # print(self.select)
-                            # print(self.game)
+                            #print(self.intro)
+                            #print(self.select)
+                            #print(self.game)
 
                             pygame.mixer_music.stop()
                             background = chose_wallpaper()
@@ -296,6 +279,8 @@ class Game:
 
                             SCORE = 0
                             HIGH_SCORE = 0
+
+                            esc()
 
             # #-----------------------------------------------------------
 
@@ -318,9 +303,9 @@ class Game:
                 SelectScreen().update()
 
             if self.intro == 0 and self.select == 0 and self.game == 1:  # #self.intro == 0 and self.game == 1:
-                # if end == 0:
+                #if end == 0:
                 StartGame().update()
-                # else:
+                #else:
                 #    End().update()
 
 
@@ -342,6 +327,15 @@ def start_game():
     screen.blit(background_load, (0, 0))
 
 
+def esc():
+    font_obj = pygame.font.SysFont('comicsansms', 30)
+    text_surface_obj = font_obj.render("To go back, press ESC", True, BLACK)
+    text_rect_obj = text_surface_obj.get_rect()
+    text_rect_obj.center = (1300, 20)
+
+    screen.blit(text_surface_obj, text_rect_obj)
+
+
 # #The screens
 # #-Logo/Intro
 class IntroScreen:
@@ -360,8 +354,9 @@ class IntroScreen:
     def update(self):
         num = 3.33333333333333333333333333333333333
         logo = Logo(int(screen_width / num), int(screen_height / 8), 600, 600, self.clicked)
-        # ALL_SPRITES_LIST.add(logo)
+        #ALL_SPRITES_LIST.add(logo)
         logo.update()
+
 
         # ALL_SPRITES_LIST.update()
         # print("IT WORKS")
@@ -369,7 +364,7 @@ class IntroScreen:
         # screen.blit(self.logo, (int(screen_width / num), int(screen_height / 8)))
 
         ALL_SPRITES_LIST.draw(screen)
-        # pygame.display.flip()
+        #pygame.display.flip()
 
         font_obj = pygame.font.SysFont('comicsansms', 30)
         text_surface_obj = font_obj.render(str(int(clock_display)), True, BLACK)
@@ -380,7 +375,7 @@ class IntroScreen:
 
         pygame.display.flip()
 
-        # print("OWOWOWOWOWOPWOWOWOWOWOIOIJDKLSJHKHSKJHKSJH")
+        #print("OWOWOWOWOWOPWOWOWOWOWOIOIJDKLSJHKHSKJHKSJH")
 
 
 class Logo(Entity):
@@ -394,7 +389,7 @@ class Logo(Entity):
     def update(self):
         # self.rect.move_ip(self.x_change, self.y_change)
         # print(self.move)
-        # pass
+        #pass
 
         x = pygame.mouse.get_pos()[0]
         y = pygame.mouse.get_pos()[1]
@@ -470,7 +465,7 @@ class Button(Entity):
 
         return text_surface_obj, text_rect_obj
 
-        # screen.blit(text_surface_obj, text_rect_obj)
+        #screen.blit(text_surface_obj, text_rect_obj)
 
 
 # #-Game Screen
@@ -552,12 +547,15 @@ class StartGame:
                         ALL_SPRITES_LIST.add(make)
                         SONG_BEAT_MAP.add(make)
 
+        #background = self.background
+
         self.song.close()
 
     def update(self):
         global SCORE
         global ALL_SPRITES_LIST
         global SONG_BEAT_MAP
+        global background
 
         if self.end == 0:
             score = ShowScore()
@@ -569,9 +567,12 @@ class StartGame:
             for notes in SONG_BEAT_MAP:
                 if notes.rect.y > self.note_hit_box_2:
                     notes.kill()
+                    #if SCORE <= 0:
                     SCORE = 0
+                    #else:
+                    #    SCORE -= 10
 
-            screen.blit(surface, rect)
+            #screen.blit(surface, rect)
 
             ALL_SPRITES_LIST.draw(screen)
             pygame.display.flip()
@@ -580,21 +581,142 @@ class StartGame:
 
             if pygame.mixer_music.get_busy() == 1:
                 self.end = 0
+                screen.blit(surface, rect)
             elif pygame.mixer_music.get_busy() == 0:
                 self.end = 1
 
-            # print(self.end)
+            #print(self.end)
 
         if self.end == 1:
-            ALL_SPRITES_LIST = pygame.sprite.Group()
+            end_screen()
+            '''ALL_SPRITES_LIST = pygame.sprite.Group()
             pygame.mixer_music.stop()
 
             SONG_BEAT_MAP = pygame.sprite.Group()
 
-            background_load = pygame.image.load("Wallpapers/%s" % self.background)
+            background_load = pygame.image.load("Wallpapers/%s" % background)
             screen.blit(background_load, (0, 0))
-            # screen.fill(BLACK)
-            pygame.display.flip()
+            #screen.fill(BLACK)
+            pygame.display.flip()'''
+
+
+def end_screen():
+    global ALL_SPRITES_LIST
+    global SONG_BEAT_MAP
+    global background
+    global CHANGE
+    global CHANGE_W
+    global TOP10
+    global TOP
+
+    ALL_SPRITES_LIST = pygame.sprite.Group()
+    pygame.mixer_music.stop()
+
+    SONG_BEAT_MAP = pygame.sprite.Group()
+
+    background_load = pygame.image.load(str(background))
+    screen.blit(background_load, (0, 0))
+    pygame.display.flip()
+
+    scores = open("Top_Score.txt", "r")
+    for i in scores:
+        TOP.append(i.replace("\n", ""))
+        pass
+    scores.close()
+
+    # print(TOP10)
+    TOP = sorted(TOP, key=int)
+    if CHANGE == 0:
+        for i in TOP:
+            if CHANGE == 0:
+                if int(i) >= SCORE:
+                    TOP10.append(int(i))
+                elif int(i) < SCORE:
+                    TOP10.append(SCORE)
+                    CHANGE = 1
+            else:
+                TOP10.append(int(i))
+        CHANGE = 1
+    else:
+        pass
+
+    TOP10 = sorted(TOP10, key=int, reverse=True)
+    scores = open("Top_Score.txt", "a")
+    if CHANGE_W == 0:
+        # This enties the file
+        scores2 = open("Top_Score.txt", "w")
+        scores2.close()
+        for i in TOP10:
+            scores.write("%s\n" % str(i))
+        CHANGE_W = 1
+    elif CHANGE_W == 1:
+        pass
+    scores.close()
+
+    fontObj = pygame.font.SysFont('comicsansms', 40)
+
+    text_surface_obj_l = fontObj.render("Top 10 Scores:", True, BLACK)
+    text_rect_obj_l = text_surface_obj_l.get_rect()
+    text_rect_obj_l.center = ((screen_width / 5), 30)
+
+    distance = 60
+
+    text_surface_obj_1 = fontObj.render("1: %s" % TOP10[0], True, BLACK)
+    text_rect_obj_1 = text_surface_obj_1.get_rect()
+    text_rect_obj_1.center = ((screen_width / 5), distance + 50)
+
+    text_surface_obj_2 = fontObj.render("2: %s" % TOP10[1], True, BLACK)
+    text_rect_obj_2 = text_surface_obj_2.get_rect()
+    text_rect_obj_2.center = ((screen_width / 5), distance * 2 + 50)
+
+    text_surface_obj_3 = fontObj.render("3: %s" % TOP10[2], True, BLACK)
+    text_rect_obj_3 = text_surface_obj_3.get_rect()
+    text_rect_obj_3.center = ((screen_width / 5), distance * 3 + 50)
+
+    text_surface_obj_4 = fontObj.render("4: %s" % TOP10[3], True, BLACK)
+    text_rect_obj_4 = text_surface_obj_4.get_rect()
+    text_rect_obj_4.center = ((screen_width / 5), distance * 4 + 50)
+
+    text_surface_obj_5 = fontObj.render("5: %s" % TOP10[4], True, BLACK)
+    text_rect_obj_5 = text_surface_obj_5.get_rect()
+    text_rect_obj_5.center = ((screen_width / 5), distance * 5 + 50)
+
+    text_surface_obj_6 = fontObj.render("6: %s" % TOP10[5], True, BLACK)
+    text_rect_obj_6 = text_surface_obj_6.get_rect()
+    text_rect_obj_6.center = ((screen_width / 5), distance * 6 + 50)
+
+    text_surface_obj_7 = fontObj.render("7: %s" % TOP10[6], True, BLACK)
+    text_rect_obj_7 = text_surface_obj_7.get_rect()
+    text_rect_obj_7.center = ((screen_width / 5), distance * 7 + 50)
+
+    text_surface_obj_8 = fontObj.render("8: %s" % TOP10[7], True, BLACK)
+    text_rect_obj_8 = text_surface_obj_8.get_rect()
+    text_rect_obj_8.center = ((screen_width / 5), distance * 8 + 50)
+
+    text_surface_obj_9 = fontObj.render("9: %s" % TOP10[8], True, BLACK)
+    text_rect_obj_9 = text_surface_obj_9.get_rect()
+    text_rect_obj_9.center = ((screen_width / 5), distance * 9 + 50)
+
+    text_surface_obj_10 = fontObj.render("10: %s" % TOP10[9], True, BLACK)
+    text_rect_obj_10 = text_surface_obj_10.get_rect()
+    text_rect_obj_10.center = ((screen_width / 5), distance * 10 + 50)
+
+    text_surface_obj_enter = fontObj.render("To go back, press ESC", True, BLACK)
+    text_rect_obj_enter = text_surface_obj_enter.get_rect()
+    text_rect_obj_enter.center = ((screen_width - screen_width / 3), screen_height / 2)
+
+    screen.blit(text_surface_obj_l, text_rect_obj_l)
+    screen.blit(text_surface_obj_1, text_rect_obj_1)
+    screen.blit(text_surface_obj_2, text_rect_obj_2)
+    screen.blit(text_surface_obj_3, text_rect_obj_3)
+    screen.blit(text_surface_obj_4, text_rect_obj_4)
+    screen.blit(text_surface_obj_5, text_rect_obj_5)
+    screen.blit(text_surface_obj_6, text_rect_obj_6)
+    screen.blit(text_surface_obj_7, text_rect_obj_7)
+    screen.blit(text_surface_obj_8, text_rect_obj_8)
+    screen.blit(text_surface_obj_9, text_rect_obj_9)
+    screen.blit(text_surface_obj_10, text_rect_obj_10)
+    screen.blit(text_surface_obj_enter, text_rect_obj_enter)
 
 
 # #Text
