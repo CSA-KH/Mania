@@ -1,7 +1,7 @@
 # #Keenan H
 # #5/6/19
-# #V 1.0.1
-# #I now have a select screen that works properly, one finished song, and an end screen with a top score.
+# #V 1.0.0
+# #I now have a select screen that works properly, one finished song, and an end screen
 
 """Mania is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -203,7 +203,7 @@ class Game:
                                             HIGH_SCORE = SCORE
                                         elif SCORE < HIGH_SCORE:
                                             SCORE += 1
-                                            print(HIGH_SCORE)
+                                            #print(HIGH_SCORE)
                                     if self.note_hit_box_1 > notes.rect.y > self.note_hit_box_3:
                                         notes.kill()
                                         SCORE = 0
@@ -508,7 +508,7 @@ class StartGame:
                     song_file = read_line
                 if self.data == 1:
                     background = read_line
-                    print(background)
+                    #print(background)
                 elif self.data == 2:
                     Note_Speed = float(read_line)
                 elif self.data == 3:
@@ -614,9 +614,10 @@ def end_screen():
 
     SONG_BEAT_MAP = pygame.sprite.Group()
 
-    background_load = pygame.image.load(str(background))
-    screen.blit(background_load, (0, 0))
-    pygame.display.flip()
+    #background_load = pygame.image.load(str(background))
+    #screen.blit(background_load, (0, 0))
+
+    screen.fill(BLACK)
 
     scores = open("Top_Score.txt", "r")
     for i in scores:
@@ -629,10 +630,10 @@ def end_screen():
     if CHANGE == 0:
         for i in TOP:
             if CHANGE == 0:
-                if int(i) >= SCORE:
+                if int(i) >= HIGH_SCORE:
                     TOP10.append(int(i))
-                elif int(i) < SCORE:
-                    TOP10.append(SCORE)
+                elif int(i) < HIGH_SCORE:
+                    TOP10.append(HIGH_SCORE)
                     CHANGE = 1
             else:
                 TOP10.append(int(i))
@@ -653,57 +654,57 @@ def end_screen():
         pass
     scores.close()
 
-    fontObj = pygame.font.SysFont('comicsansms', 40)
+    font_obj = pygame.font.SysFont('comicsansms', 40)
 
-    text_surface_obj_l = fontObj.render("Top 10 Scores:", True, BLACK)
+    text_surface_obj_l = font_obj.render("Top 10 Scores:", True, WHITE)
     text_rect_obj_l = text_surface_obj_l.get_rect()
     text_rect_obj_l.center = ((screen_width / 5), 30)
 
     distance = 60
 
-    text_surface_obj_1 = fontObj.render("1: %s" % TOP10[0], True, BLACK)
+    text_surface_obj_1 = font_obj.render("1: %s" % TOP10[0], True, WHITE)
     text_rect_obj_1 = text_surface_obj_1.get_rect()
     text_rect_obj_1.center = ((screen_width / 5), distance + 50)
 
-    text_surface_obj_2 = fontObj.render("2: %s" % TOP10[1], True, BLACK)
+    text_surface_obj_2 = font_obj.render("2: %s" % TOP10[1], True, WHITE)
     text_rect_obj_2 = text_surface_obj_2.get_rect()
     text_rect_obj_2.center = ((screen_width / 5), distance * 2 + 50)
 
-    text_surface_obj_3 = fontObj.render("3: %s" % TOP10[2], True, BLACK)
+    text_surface_obj_3 = font_obj.render("3: %s" % TOP10[2], True, WHITE)
     text_rect_obj_3 = text_surface_obj_3.get_rect()
     text_rect_obj_3.center = ((screen_width / 5), distance * 3 + 50)
 
-    text_surface_obj_4 = fontObj.render("4: %s" % TOP10[3], True, BLACK)
+    text_surface_obj_4 = font_obj.render("4: %s" % TOP10[3], True, WHITE)
     text_rect_obj_4 = text_surface_obj_4.get_rect()
     text_rect_obj_4.center = ((screen_width / 5), distance * 4 + 50)
 
-    text_surface_obj_5 = fontObj.render("5: %s" % TOP10[4], True, BLACK)
+    text_surface_obj_5 = font_obj.render("5: %s" % TOP10[4], True, WHITE)
     text_rect_obj_5 = text_surface_obj_5.get_rect()
     text_rect_obj_5.center = ((screen_width / 5), distance * 5 + 50)
 
-    text_surface_obj_6 = fontObj.render("6: %s" % TOP10[5], True, BLACK)
+    text_surface_obj_6 = font_obj.render("6: %s" % TOP10[5], True, WHITE)
     text_rect_obj_6 = text_surface_obj_6.get_rect()
     text_rect_obj_6.center = ((screen_width / 5), distance * 6 + 50)
 
-    text_surface_obj_7 = fontObj.render("7: %s" % TOP10[6], True, BLACK)
+    text_surface_obj_7 = font_obj.render("7: %s" % TOP10[6], True, WHITE)
     text_rect_obj_7 = text_surface_obj_7.get_rect()
     text_rect_obj_7.center = ((screen_width / 5), distance * 7 + 50)
 
-    text_surface_obj_8 = fontObj.render("8: %s" % TOP10[7], True, BLACK)
+    text_surface_obj_8 = font_obj.render("8: %s" % TOP10[7], True, WHITE)
     text_rect_obj_8 = text_surface_obj_8.get_rect()
     text_rect_obj_8.center = ((screen_width / 5), distance * 8 + 50)
 
-    text_surface_obj_9 = fontObj.render("9: %s" % TOP10[8], True, BLACK)
+    text_surface_obj_9 = font_obj.render("9: %s" % TOP10[8], True, WHITE)
     text_rect_obj_9 = text_surface_obj_9.get_rect()
     text_rect_obj_9.center = ((screen_width / 5), distance * 9 + 50)
 
-    text_surface_obj_10 = fontObj.render("10: %s" % TOP10[9], True, BLACK)
+    text_surface_obj_10 = font_obj.render("10: %s" % TOP10[9], True, WHITE)
     text_rect_obj_10 = text_surface_obj_10.get_rect()
     text_rect_obj_10.center = ((screen_width / 5), distance * 10 + 50)
 
-    text_surface_obj_enter = fontObj.render("To go back, press ESC", True, BLACK)
+    text_surface_obj_enter = font_obj.render("To go back, press ESC", True, WHITE)
     text_rect_obj_enter = text_surface_obj_enter.get_rect()
-    text_rect_obj_enter.center = ((screen_width - screen_width / 3), screen_height / 2)
+    text_rect_obj_enter.center = ((screen_width / 5), distance * 11 + 50)
 
     screen.blit(text_surface_obj_l, text_rect_obj_l)
     screen.blit(text_surface_obj_1, text_rect_obj_1)
@@ -718,6 +719,7 @@ def end_screen():
     screen.blit(text_surface_obj_10, text_rect_obj_10)
     screen.blit(text_surface_obj_enter, text_rect_obj_enter)
 
+    pygame.display.flip()
 
 # #Text
 # # - Score
