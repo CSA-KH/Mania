@@ -1,6 +1,6 @@
 # #Keenan H
-# #5/23/19
-# #V 1.0.1
+# #5/6/19
+# #V 1.0.0
 # #I now have a select screen that works properly, one finished song, and an end screen
 
 """Mania is free software: you can redistribute it and/or modify
@@ -616,7 +616,7 @@ def end_screen():
 
     screen.fill(BLACK)
 
-    scores = open("Top_Score.txt", "r")
+    scores = open("%s/Top_Score.txt" % beat_map_file, "r")
     for i in scores:
         TOP.append(i.replace("\n", ""))
         pass
@@ -643,7 +643,7 @@ def end_screen():
 
     if CHANGE_W == 0:
         # This enties the file
-        scores2 = open("Top_Score.txt", "w")
+        scores2 = open("%s/Top_Score.txt" % beat_map_file, "w")
         scores2.close()
         for i in TOP10:
             scores.write("%s\n" % str(i))
