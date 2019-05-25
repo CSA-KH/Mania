@@ -1,6 +1,6 @@
 # #Keenan H
-# #5/6/19
-# #V 1.0.0
+# #5/23/19
+# #V 1.0.1
 # #I now have a select screen that works properly, one finished song, and an end screen
 
 """Mania is free software: you can redistribute it and/or modify
@@ -139,8 +139,8 @@ class Game:
 
                             # #Calls background, song, and clears the Group
                             ALL_SPRITES_LIST = pygame.sprite.Group()
-                            #print(ALL_SPRITES_LIST)
-                            #print("hdsajidhgasjghdfjksahgjkfhasjkhfjkashfjkhdgsjkgreuiwhfksdbfuidsbknvbweuivbhjgweuyfg")
+                            # print(ALL_SPRITES_LIST)
+                            # print("hdsajidhgasjghdfjksahgjkfhasjkhfjkashfjkhdgsjkgreuiwhfksdbfuidsbknvbweuivbhjgweuyfg")
 
                             background = chose_wallpaper()
                             background_load = pygame.image.load("Wallpapers/%s" % background)
@@ -168,7 +168,7 @@ class Game:
 
                             song = "SAO Alicization"
                             beat_map_file = song
-                            #print(beat_map_file)
+                            # print(beat_map_file)
                             start_game()
 
                             esc()
@@ -203,7 +203,7 @@ class Game:
                                             HIGH_SCORE = SCORE
                                         elif SCORE < HIGH_SCORE:
                                             SCORE += 1
-                                            #print(HIGH_SCORE)
+                                            # print(HIGH_SCORE)
                                     if self.note_hit_box_1 > notes.rect.y > self.note_hit_box_3:
                                         notes.kill()
                                         SCORE = 0
@@ -234,10 +234,10 @@ class Game:
                             self.intro = 0
                             self.select = 1
                             self.game = 0
-                            
-                            #print(self.intro)
-                            #print(self.select)
-                            #print(self.game)
+
+                            # print(self.intro)
+                            # print(self.select)
+                            # print(self.game)
 
                             background = chose_wallpaper()
 
@@ -249,9 +249,9 @@ class Game:
                     if self.intro == 0 and self.select == 1 and self.game == 0:
                         if eventG.key == pygame.K_ESCAPE:
                             ALL_SPRITES_LIST = pygame.sprite.Group()
-                            #print(self.intro)
-                            #print(self.select)
-                            #print(self.game)
+                            # print(self.intro)
+                            # print(self.select)
+                            # print(self.game)
                             self.intro = 1
                             self.select = 0
                             self.game = 0
@@ -265,9 +265,9 @@ class Game:
                             self.select = 1
                             self.game = 0
 
-                            #print(self.intro)
-                            #print(self.select)
-                            #print(self.game)
+                            # print(self.intro)
+                            # print(self.select)
+                            # print(self.game)
 
                             pygame.mixer_music.stop()
                             background = chose_wallpaper()
@@ -285,7 +285,7 @@ class Game:
             # #-----------------------------------------------------------
 
             if self.intro == 1 and self.select == 0 and self.game == 0:  # #self.intro == 1 and self.game == 0:
-                #global SCORE
+                # global SCORE
                 ALL_SPRITES_LIST = pygame.sprite.Group()
                 SONG_BEAT_MAP = pygame.sprite.Group()
 
@@ -303,9 +303,9 @@ class Game:
                 SelectScreen().update()
 
             if self.intro == 0 and self.select == 0 and self.game == 1:  # #self.intro == 0 and self.game == 1:
-                #if end == 0:
+                # if end == 0:
                 StartGame().update()
-                #else:
+                # else:
                 #    End().update()
 
 
@@ -354,9 +354,8 @@ class IntroScreen:
     def update(self):
         num = 3.33333333333333333333333333333333333
         logo = Logo(int(screen_width / num), int(screen_height / 8), 600, 600, self.clicked)
-        #ALL_SPRITES_LIST.add(logo)
+        # ALL_SPRITES_LIST.add(logo)
         logo.update()
-
 
         # ALL_SPRITES_LIST.update()
         # print("IT WORKS")
@@ -364,7 +363,7 @@ class IntroScreen:
         # screen.blit(self.logo, (int(screen_width / num), int(screen_height / 8)))
 
         ALL_SPRITES_LIST.draw(screen)
-        #pygame.display.flip()
+        # pygame.display.flip()
 
         font_obj = pygame.font.SysFont('comicsansms', 30)
         text_surface_obj = font_obj.render(str(int(clock_display)), True, BLACK)
@@ -375,7 +374,7 @@ class IntroScreen:
 
         pygame.display.flip()
 
-        #print("OWOWOWOWOWOPWOWOWOWOWOIOIJDKLSJHKHSKJHKSJH")
+        # print("OWOWOWOWOWOPWOWOWOWOWOIOIJDKLSJHKHSKJHKSJH")
 
 
 class Logo(Entity):
@@ -389,7 +388,7 @@ class Logo(Entity):
     def update(self):
         # self.rect.move_ip(self.x_change, self.y_change)
         # print(self.move)
-        #pass
+        # pass
 
         x = pygame.mouse.get_pos()[0]
         y = pygame.mouse.get_pos()[1]
@@ -465,7 +464,7 @@ class Button(Entity):
 
         return text_surface_obj, text_rect_obj
 
-        #screen.blit(text_surface_obj, text_rect_obj)
+        # screen.blit(text_surface_obj, text_rect_obj)
 
 
 # #-Game Screen
@@ -508,7 +507,7 @@ class StartGame:
                     song_file = read_line
                 if self.data == 1:
                     background = read_line
-                    #print(background)
+                    # print(background)
                 elif self.data == 2:
                     Note_Speed = float(read_line)
                 elif self.data == 3:
@@ -547,7 +546,7 @@ class StartGame:
                         ALL_SPRITES_LIST.add(make)
                         SONG_BEAT_MAP.add(make)
 
-        #background = self.background
+        # background = self.background
 
         self.song.close()
 
@@ -567,12 +566,12 @@ class StartGame:
             for notes in SONG_BEAT_MAP:
                 if notes.rect.y > self.note_hit_box_2:
                     notes.kill()
-                    #if SCORE <= 0:
+                    # if SCORE <= 0:
                     SCORE = 0
-                    #else:
+                    # else:
                     #    SCORE -= 10
 
-            #screen.blit(surface, rect)
+            # screen.blit(surface, rect)
 
             ALL_SPRITES_LIST.draw(screen)
             pygame.display.flip()
@@ -585,15 +584,13 @@ class StartGame:
             elif pygame.mixer_music.get_busy() == 0:
                 self.end = 1
 
-            #print(self.end)
+            # print(self.end)
 
         if self.end == 1:
             end_screen()
             '''ALL_SPRITES_LIST = pygame.sprite.Group()
             pygame.mixer_music.stop()
-
             SONG_BEAT_MAP = pygame.sprite.Group()
-
             background_load = pygame.image.load("Wallpapers/%s" % background)
             screen.blit(background_load, (0, 0))
             #screen.fill(BLACK)
@@ -614,8 +611,8 @@ def end_screen():
 
     SONG_BEAT_MAP = pygame.sprite.Group()
 
-    #background_load = pygame.image.load(str(background))
-    #screen.blit(background_load, (0, 0))
+    # background_load = pygame.image.load(str(background))
+    # screen.blit(background_load, (0, 0))
 
     screen.fill(BLACK)
 
@@ -642,8 +639,8 @@ def end_screen():
         pass
 
     TOP10 = sorted(TOP10, key=int, reverse=True)
-    scores = open("Top_Score.txt", "a")
-    
+    scores = open("%s/Top_Score.txt" % beat_map_file, "a")
+
     if CHANGE_W == 0:
         # This enties the file
         scores2 = open("Top_Score.txt", "w")
